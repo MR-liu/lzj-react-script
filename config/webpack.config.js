@@ -1,11 +1,12 @@
-process.env.NODE_ENV = 'development' // production development
-process.env.PUBLIC_URL = 'public'
-process.env.HOME_PAGE = 'http://www.lzj.com'
-process.env.GENERATE_SOURCEMAP = true
+// process.env.NODE_ENV = 'development' // production development
+// process.env.PUBLIC_URL = 'public'
+// process.env.HOME_PAGE = 'http://www.lzj.com'
+// process.env.GENERATE_SOURCEMAP = true
 
 const TerserPlugin = require('terser-webpack-plugin'); // 用terser-webpack-plugin替换掉uglifyjs-webpack-plugin解决uglifyjs不支持es6语法问题
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const path = require('path')
 // const modules = require('./modules');
@@ -13,13 +14,15 @@ const path = require('path')
 const getClientEnvironment = require('../config/env')
 const {
   pkg,
+  appPath,
   publicUrlPath,
   appIndexJs,
   appBuild,
-  appSrc
+  appSrc,
+  appHtml
 } = require('./paths')
-const { href } = publicUrlPath
 
+const { href } = publicUrlPath
 const { pathname } = publicUrlPath;
 
 const isEnvProduction = process.env.NODE_ENV === 'production'
@@ -48,7 +51,7 @@ const commonConfig = () => {
       chunkFilename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].chunk.js'
         : isEnvDevelopment && 'static/js/[name].chunk.js',
-      publicPath: pathname,
+      publicPath: isEnvDevelopment ? undefined: appPath,
       devtoolModuleFilenameTemplate: isEnvProduction // 行到行map模式用一个简单的 sourcecMap , 在这个sourceMap 中每行生成的文件映射到同一行的源文件
         ? info =>
             path
@@ -115,6 +118,40 @@ const commonConfig = () => {
     //     modules.additionalModulePaths || []
     //   ),
     // }
+    module: {
+      strictExportPresence: true,
+      rules: [
+        // Disable require.ensure as it's not a standard language feature.
+        { parser: { requireEnsure: false } }, // 禁用require。请确保它不是标准语言功能。
+      ]
+    },
+    plugins: [
+      new HtmlWebpackPlugin(
+        Object.assign(
+          {},
+          {
+            inject: true,
+            template: appHtml,
+          },
+          isEnvProduction
+            ? {
+                minify: {
+                  removeComments: true,
+                  collapseWhitespace: true,
+                  removeRedundantAttributes: true,
+                  useShortDoctype: true,
+                  removeEmptyAttributes: true,
+                  removeStyleLinkTypeAttributes: true,
+                  keepClosingSlash: true,
+                  minifyJS: true,
+                  minifyCSS: true,
+                  minifyURLs: true,
+                },
+              }
+            : undefined
+        )
+      ),
+    ]
   }
 }
 

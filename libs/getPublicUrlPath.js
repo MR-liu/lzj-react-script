@@ -40,6 +40,9 @@ const { URL } = require('url');
  */
 function getPublicUrlPath(isEnvDevelopment, homePage, PublicUrl = 'public') {
   let baseUrlPath = '';
+  if (isEnvDevelopment) {
+    PublicUrl = '/'
+  }
 
   if (!isEnvDevelopment && homePage) {
     homePage = `${homePage.startsWith('http') ? '' : 'http://'}${homePage}${homePage.endsWith('/') ? '' : '/'}`

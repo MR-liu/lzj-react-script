@@ -18,12 +18,15 @@ const webpackConfig = require('../config/webpack.config')
 require('../config/env');
 
 module.exports = (configs) => {
-  console.log(configs)
+  const {
+    port
+  } = configs;
 
   const compiler = webpack(webpackConfig);
 
   const devServer = new WebpackDevServer(compiler, {});
-  devServer.listen(8080, HOST, err => {
+
+  devServer.listen(port, HOST, err => {
     // if (err) {
     //   return console.log(err);
     // }
@@ -43,7 +46,7 @@ module.exports = (configs) => {
     //   console.log();
     // }
 
-    // console.log(chalk.cyan('Starting the development server...\n'));
+    console.log(chalk.cyan('Starting the development server...\n'));
     // openBrowser(urls.localUrlForBrowser);
   });
 }
