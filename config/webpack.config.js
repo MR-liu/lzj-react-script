@@ -8,9 +8,9 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
 
 const path = require('path')
-const modules = require('./modules');
+// const modules = require('./modules');
 
-const getClientEnvironment = require('../libs/env')
+const getClientEnvironment = require('../config/env')
 const {
   pkg,
   publicUrlPath,
@@ -110,11 +110,11 @@ const commonConfig = () => {
         name: entrypoint => `runtime-${entrypoint.name}`,
       },
     },
-    resolve: {
-      modules: ['node_modules', appNodeModules].concat(
-        modules.additionalModulePaths || []
-      ),
-    }
+    // resolve: {
+    //   modules: ['node_modules', appNodeModules].concat(
+    //     modules.additionalModulePaths || []
+    //   ),
+    // }
   }
 }
 

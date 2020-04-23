@@ -2,10 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const paths = require('../paths');
+const paths = require('./paths');
 
 // 清楚缓存 确保获取的是最新的
-delete require.cache[require.resolve('../paths')];
+delete require.cache[require.resolve('./paths')];
 
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
