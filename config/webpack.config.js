@@ -112,7 +112,7 @@ const commonConfig = () => {
       chunkFilename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].chunk.js'
         : isEnvDevelopment && 'static/js/[name].chunk.js',
-      publicPath: isEnvDevelopment ? undefined: appBuild,
+      // publicPath: isEnvDevelopment ? undefined: appBuild,
       devtoolModuleFilenameTemplate: isEnvProduction // 行到行map模式用一个简单的 sourcecMap , 在这个sourceMap 中每行生成的文件映射到同一行的源文件
         ? info =>
             path
@@ -191,7 +191,7 @@ const commonConfig = () => {
           oneOf: [
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: appSrc,
+              // include: appSrc,
               loader: require.resolve('babel-loader'),
               options: {
                 // customize: require.resolve(
