@@ -13,9 +13,14 @@ const WebpackDevServer = require('webpack-dev-server');
 
 const paths = require('../config/paths');
 const webpackConfig = require('../config/webpack.config') 
+const createDevServerConfig = require('../config/webpack.config.dev');
 
 // 启用环境变量
 require('../config/env');
+
+process.on('unhandledRejection', err => {
+  throw err;
+});
 
 module.exports = (configs) => {
   const {
@@ -24,7 +29,13 @@ module.exports = (configs) => {
 
   const compiler = webpack(webpackConfig);
 
-  const devServer = new WebpackDevServer(compiler, {});
+  const serverConfig = createDevServerConfig(
+    {},
+    ''
+  );
+
+  console.log(webpackConfig)
+  const devServer = new WebpackDevServer(compiler);
 
   devServer.listen(port, HOST, err => {
     // if (err) {

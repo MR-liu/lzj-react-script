@@ -48,7 +48,7 @@ module.exports = {
   pkg,
   appPath: resolveApp('./'),
   appIndexJs: resolveModule(resolveApp, 'src/index'),
-  appBuild: resolveApp('build'),
+  appBuild: resolveApp('asset'),
   appSrc: resolveApp('src'),
   appNodeModules: resolveApp('node_modules'),
   appHtml: resolveApp('public/index.html'),

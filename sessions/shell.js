@@ -26,15 +26,6 @@ const argv = require('yargs')
   }, (argv) => {
     require('../services/build')(argv);
   })
-  .command('init <project>', '初始化', (yargs) => {
-    yargs
-      .positional('port', {
-        describe: 'port to bind on',
-        required: true,
-      })
-  }, (argv) => {
-    console.log(argv, 'init')
-  })
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

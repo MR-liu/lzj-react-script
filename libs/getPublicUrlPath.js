@@ -40,6 +40,7 @@ const { URL } = require('url');
  */
 function getPublicUrlPath(isEnvDevelopment, homePage, PublicUrl = 'public') {
   let baseUrlPath = '';
+  baseUrlPath = 'http://127.0.0.1/'
   if (isEnvDevelopment) {
     PublicUrl = '/'
   }
@@ -48,10 +49,9 @@ function getPublicUrlPath(isEnvDevelopment, homePage, PublicUrl = 'public') {
     homePage = `${homePage.startsWith('http') ? '' : 'http://'}${homePage}${homePage.endsWith('/') ? '' : '/'}`
 
     baseUrlPath = homePage
-  } else {
-    baseUrlPath = 'http://127.0.0.1/'
   }
 
+  console.log(PublicUrl, baseUrlPath)
 
   return new URL(PublicUrl, baseUrlPath);
 }
