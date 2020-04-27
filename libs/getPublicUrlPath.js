@@ -51,8 +51,6 @@ function getPublicUrlPath(isEnvDevelopment, homePage, PublicUrl = 'public') {
     baseUrlPath = homePage
   }
 
-  console.log(PublicUrl, baseUrlPath)
-
   return new URL(PublicUrl, baseUrlPath);
 }
 

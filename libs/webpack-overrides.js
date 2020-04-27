@@ -28,7 +28,6 @@ module.exports = function() {
       //     }),
       //   });
       // }
-      console.log(config, source)
       return config.options;
     },
   };

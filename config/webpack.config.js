@@ -14,6 +14,7 @@ const path = require('path')
 
 const getClientEnvironment = require('../config/env');
 const getCSSModuleLocalIdent = require('../libs/getCSSModuleLocalIdent');
+
 const {
   pkg,
   appPath,
@@ -30,9 +31,12 @@ const { pathname } = publicUrlPath;
 const isEnvProduction = process.env.NODE_ENV === 'production'
 const isEnvDevelopment = process.env.NODE_ENV === 'development'
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'; // 在docker下配置显示source-map
+const imageInlineSizeLimit = parseInt(
+  process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
+);
+
 
 const getStyleLoaders = (cssOptions, preProcessor) => {
-  // console
   const loaders = [
     isEnvDevelopment && require.resolve('style-loader'),
     isEnvProduction &&
@@ -123,10 +127,6 @@ const commonConfig = () => {
       jsonpFunction: `webpackJsonp${pkg.name}`, // webpack4中手动指定
       globalObject: 'this', // 用于配置运行时的全局对象引用
     },
-    // devServer: {
-    //   hot: true,
-    //   hotOnly: true,
-    // },
     optimization: { // 只在生产环境下运行
       minimize: isEnvProduction, // 压缩js代码
       minimizer: [
@@ -190,6 +190,14 @@ const commonConfig = () => {
         {
           oneOf: [
             {
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              loader: require.resolve('url-loader'),
+              options: {
+                limit: imageInlineSizeLimit,
+                name: 'static/media/[name].[hash:8].[ext]',
+              },
+            },
+            {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
               // include: appSrc,
               loader: require.resolve('babel-loader'),
@@ -224,11 +232,7 @@ const commonConfig = () => {
                     },
                   ],
                 ],
-                // This is a feature of `babel-loader` for webpack (not Babel itself).
-                // It enables caching results in ./node_modules/.cache/babel-loader/
-                // directory for faster rebuilds.
                 cacheDirectory: true,
-                // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
                 compact: isEnvProduction,
               },
@@ -358,9 +362,9 @@ const commonConfig = () => {
     performance: {
       hints:'warning',
       //入口起点的最大体积
-      maxEntrypointSize: 4000000,
+      maxEntrypointSize: 40000000,
       //生成文件的最大体积
-      maxAssetSize: 1000000,
+      maxAssetSize: 10000000,
       //只给出 js 文件的性能提示
       assetFilter: function(assetFilename) {
         return assetFilename.endsWith('.js');
